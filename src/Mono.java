@@ -39,8 +39,6 @@ public class Mono extends JFrame {
         
         //panel.writeString("CAT ALPHEBET", 0, 0);
         //panel.writeString("    THE LAZY BROWN FOX QUICKLY FUCKS THE UNCOUNCIOUS JUVENILE DOG", 0, 1,0,162,240);
-        panel.writeString("TESTING THE NEW OUTPUT METHOD WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",240,150,100);
-        
         
         m.add(panel);
         
@@ -48,6 +46,9 @@ public class Mono extends JFrame {
         m.setVisible(true);
         m.setFocusable(true);
         m.addKeyListener(new listner());
+        
+        panel.writeString("TESTING THE NEW OUTPUT METHOD WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",240,150,100);
+        
     }
 }
 
@@ -107,18 +108,20 @@ class DylansJankyTextRenderer extends JPanel {
             for(int y = 0; y < screenManager.Height-1; y++) {
             	
             	enhancedCharacter c = screenManager.screen[x][y];
-            	
+
             	if(c!=null && c.needs_update)
+            	{
             		g.drawImage(c.cache, x*6, y*10, null);
+            		screenManager.screen[x][y].needs_update=false;
+            	}
             	
-            	else
+            	else if(c==null)
             	{
             		screenManager.screen[x][y] = new enhancedCharacter(' ');
             		g.drawImage(screenManager.screen[x][y].cache, x*6, y*10, null);
             	}
-
+            	
             	}
-                
             }
         repaint();
         }
