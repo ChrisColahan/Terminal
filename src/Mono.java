@@ -29,8 +29,8 @@ public class Mono extends JFrame {
         m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
         int w,h=0;
-        w = 50;
-        h = 10;
+        w = 120;
+        h = 40;
         
         
         panel = new DylansJankyTextRenderer(w, h);
@@ -68,6 +68,12 @@ class DylansJankyTextRenderer extends JPanel {
     {
     	for(int k=0;k<s.length();k++)
     	{
+    		if(s.charAt(k)=='\n')
+    		{
+    			screenManager.cursorX=0;
+    			screenManager.cursorY++;
+    			continue;
+    		}
     		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,r,b,g);
     		if(screenManager.cursorX<(screenManager.Width-1))
     			screenManager.cursorX++;
@@ -81,17 +87,7 @@ class DylansJankyTextRenderer extends JPanel {
     
     public void writeString(String s)
     {
-    	for(int k=0;k<s.length();k++)
-    	{
-    		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,255,255,255);
-    		if(screenManager.cursorX<(screenManager.Width-1))
-    			screenManager.cursorX++;
-    		else
-    		{
-    			screenManager.cursorX=0;
-    			screenManager.cursorY++;
-    		}
-    	}
+    	writeString(s, 255, 255, 255);
     }
     
     public void writeString(String s, int x, int y)
@@ -229,6 +225,7 @@ class screenManager
 	
 	public static void writeChar(char c, int x, int y, int r, int b, int g)
 	{
+		System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
 		screen[x][y] = new enhancedCharacter(c, r, b, g);
 		screen[x][y].needs_update=true;
 	}
@@ -251,6 +248,13 @@ class listner implements KeyListener
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		if(e.getKeyChar()=='\n')
+		{
+			screenManager.cursorX=0;
+			screenManager.cursorY++;
+			return;
+		}
+		
 		screenManager.writeChar(e.getKeyChar(), screenManager.cursorX, screenManager.cursorY,255,255,255);
 		if(screenManager.cursorX<(screenManager.Width-1))
 			screenManager.cursorX++;
