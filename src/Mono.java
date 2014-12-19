@@ -105,14 +105,14 @@ class DylansJankyTextRenderer extends JPanel {
     
     public void paintComponent(Graphics g) {
         for(int x = 0; x < screenManager.Width; x++) {
-            for(int y = 0; y < screenManager.Height-1; y++) {
+            for(int y = 0; y < screenManager.Height; y++) {
             	
             	enhancedCharacter c = screenManager.screen[x][y];
 
             	if(c!=null && c.needs_update)
             	{
             		g.drawImage(c.cache, x*6, y*10, null);
-            		screenManager.screen[x][y].needs_update=false;
+            		//screenManager.screen[x][y].needs_update=false;
             	}
             	
             	else if(c==null)
@@ -134,7 +134,7 @@ class enhancedCharacter
 	char value;
 	int r = 0,g = 0,b = 0;
 	BufferedImage cache;
-	boolean needs_update=false;
+	boolean needs_update=true;
 	
 	public enhancedCharacter(char value, int r, int g, int b) {
 		this.value = value;
@@ -257,6 +257,19 @@ class listner implements KeyListener
 			screenManager.cursorY++;
 			return;
 		}
+		
+		/*if(e.getKeyChar()=='1')
+		{
+			for(int x = 0; x < screenManager.Width; x ++) {
+	            for(int y = 0; y < screenManager.Height; y ++) {
+	            	if(screenManager.screen[x][y]==null)
+	            		System.out.println("WTF thers a null char at "+x+"  ::  "+y+"\n");
+	            	else
+	            		screenManager.screen[x][y].needs_update=true;
+	            }
+	        }
+			return;
+		}*/
 		
 		screenManager.writeChar(e.getKeyChar(), screenManager.cursorX, screenManager.cursorY,255,255,255);
 		if(screenManager.cursorX<(screenManager.Width-1))
