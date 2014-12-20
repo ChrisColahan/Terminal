@@ -37,17 +37,12 @@ public class Mono extends JFrame {
         m.setPreferredSize(new Dimension(w*5,h*10));
         m.setResizable(false);
         
-        //panel.writeString("CAT ALPHEBET", 0, 0);
-        //panel.writeString("    THE LAZY BROWN FOX QUICKLY FUCKS THE UNCOUNCIOUS JUVENILE DOG", 0, 1,0,162,240);
-        
         m.add(panel);
         
         m.pack();
         m.setVisible(true);
         m.setFocusable(true);
         m.addKeyListener(new listner());
-        
-        panel.writeString("TESTING THE NEW OUTPUT METHOD WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",240,150,100);
         
     }
 }
@@ -189,7 +184,7 @@ class screenManager
 	static int cursorX=0;
 	static int cursorY=0;
 	static HashMap<Character, BufferedImage> table;
-	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.";
 	static enhancedCharacter[][] screen;
 	static int Width,Height;
 	
@@ -257,19 +252,6 @@ class listner implements KeyListener
 			screenManager.cursorY++;
 			return;
 		}
-		
-		/*if(e.getKeyChar()=='1')
-		{
-			for(int x = 0; x < screenManager.Width; x ++) {
-	            for(int y = 0; y < screenManager.Height; y ++) {
-	            	if(screenManager.screen[x][y]==null)
-	            		System.out.println("WTF thers a null char at "+x+"  ::  "+y+"\n");
-	            	else
-	            		screenManager.screen[x][y].needs_update=true;
-	            }
-	        }
-			return;
-		}*/
 		
 		screenManager.writeChar(e.getKeyChar(), screenManager.cursorX, screenManager.cursorY,255,255,255);
 		if(screenManager.cursorX<(screenManager.Width-1))
