@@ -9,6 +9,10 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Queue;
 import java.util.Scanner;
@@ -54,8 +58,13 @@ public class Mono extends JFrame {
     
     public static void writePrompt()
     {
+    	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    	Calendar cal = Calendar.getInstance();
+    	
     	panel.writeString(" Arathnim ",255,255,255,25,100,100);
-        panel.writeString(""+ (char) 18 + (char) 17+" ",25,100,100);
+        panel.writeString(""+ (char) 21,25,100,100,42,71,135);
+        panel.writeString(" "+dateFormat.format(cal.getTime())+" ",255,255,255,42,71,135);
+        panel.writeString(""+(char) 18+(char) 17+" ", 42,135,71);
     }
     
     public static void displayCat()
@@ -139,6 +148,8 @@ class DylansJankyTextRenderer extends JPanel {
     		{
     			screenManager.cursorX=0;
     			screenManager.cursorY++;
+    			if(screenManager.cursorY==(screenManager.Height-2))
+    				screenManager.shift();
     			continue;
     		}
     		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,r,b,g);
@@ -148,6 +159,8 @@ class DylansJankyTextRenderer extends JPanel {
     		{
     			screenManager.cursorX=0;
     			screenManager.cursorY++;
+    			if(screenManager.cursorY==(screenManager.Height-2))
+    				screenManager.shift();
     		}
     	}
     }
@@ -160,6 +173,8 @@ class DylansJankyTextRenderer extends JPanel {
     		{
     			screenManager.cursorX=0;
     			screenManager.cursorY++;
+    			if(screenManager.cursorY==(screenManager.Height-2))
+    				screenManager.shift();
     			continue;
     		}
     		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,r,b,g,r2,g2,b2);
@@ -169,6 +184,8 @@ class DylansJankyTextRenderer extends JPanel {
     		{
     			screenManager.cursorX=0;
     			screenManager.cursorY++;
+    			if(screenManager.cursorY==(screenManager.Height-2))
+    				screenManager.shift();
     		}
     	}
     }
@@ -290,9 +307,10 @@ class screenManager
 	static int cursorY=0;
 	static HashMap<Character, BufferedImage> table;
 	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20+"()><[]012345689{}7"
-			+ "\\/;:'\",!@#$%^&*-_+=";
+			+ "\\/;:'\",!@#$%^&*-_+=" + (char) 21 + (char) 22;
 	static enhancedCharacter[][] screen;
 	static int Width,Height;
+	public static String input="";
 	
 	public static void init(int w, int h)
 	{
@@ -322,23 +340,26 @@ class screenManager
 	
 	public static void writeChar(char c, int x, int y)
 	{
-		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
-		screen[x][y] = new enhancedCharacter(c);
-		screen[x][y].needs_update=true;
+		writeChar(c, x, y, 0,0,0);
 	}
 	
 	public static void writeChar(char c, int x, int y, int r, int b, int g)
 	{
-		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
-		screen[x][y] = new enhancedCharacter(c, r, b, g);
-		screen[x][y].needs_update=true;
+		writeChar(c, x, y, r, b, g, 0, 0, 0);
 	}
 	
 	public static void writeChar(char c, int x, int y, int r, int b, int g,int r2, int b2, int g2)
 	{
-		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
 		screen[x][y] = new enhancedCharacter(c, r, b, g, r2, b2, g2);
 		screen[x][y].needs_update=true;
+	}
+	
+	public static void shift()
+	{
+		for (int k=0;k<Width;k++)
+			for (int j=0;j<Height-1;j++)
+				screen[k][j] = screen[k][j+1];
+		cursorY--;
 	}
 }
 
@@ -353,6 +374,8 @@ class listner implements KeyListener
 		{
 			screenManager.cursorX=0;
 			screenManager.cursorY++;
+			if(screenManager.cursorY==(screenManager.Height-2))
+				screenManager.shift();
 			System.out.println("["+input+"]");
 			input="";
 			Mono.writePrompt();
@@ -386,10 +409,9 @@ class listner implements KeyListener
 		{
 			screenManager.cursorX=0;
 			screenManager.cursorY++;
+			if(screenManager.cursorY==(screenManager.Height-2))
+				screenManager.shift();
 		}
-		
-	
-		
 	}
 
 	@Override
