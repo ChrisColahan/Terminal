@@ -228,7 +228,8 @@ class screenManager
 	static int cursorX=0;
 	static int cursorY=0;
 	static HashMap<Character, BufferedImage> table;
-	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20+"()><[]";
+	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20+"()><[]012345689{}7"
+			+ "\\/;:'\",!@#$%^&*-_+=";
 	static enhancedCharacter[][] screen;
 	static int Width,Height;
 	
@@ -260,21 +261,21 @@ class screenManager
 	
 	public static void writeChar(char c, int x, int y)
 	{
-		System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
+		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
 		screen[x][y] = new enhancedCharacter(c);
 		screen[x][y].needs_update=true;
 	}
 	
 	public static void writeChar(char c, int x, int y, int r, int b, int g)
 	{
-		System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
+		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
 		screen[x][y] = new enhancedCharacter(c, r, b, g);
 		screen[x][y].needs_update=true;
 	}
 	
 	public static void writeChar(char c, int x, int y, int r, int b, int g,int r2, int b2, int g2)
 	{
-		System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
+		//System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
 		screen[x][y] = new enhancedCharacter(c, r, b, g, r2, b2, g2);
 		screen[x][y].needs_update=true;
 	}
@@ -287,18 +288,6 @@ class listner implements KeyListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 		if(e.getKeyChar()=='\n')
 		{
 			screenManager.cursorX=0;
@@ -309,7 +298,7 @@ class listner implements KeyListener
 			return;
 		}
 		
-		if(e.getKeyChar()=='\b' && screenManager.cursorX!=0)
+		if(e.getKeyChar()=='\b' && screenManager.cursorX!=0 && input.length()!=0)
 		{
 			System.out.println("Backspace!\n");
 			input = input.substring(0, input.length()-1);
@@ -317,6 +306,8 @@ class listner implements KeyListener
 			screenManager.cursorX--;
 			return;
 		}
+		
+		//System.out.println("Got char value :: "+ (int) e.getKeyChar()+" :: "+e.getKeyCode()+"\n");
 		
 		if(screenManager.charMap.indexOf(e.getKeyChar()+"") != -1)
 		{
@@ -336,6 +327,18 @@ class listner implements KeyListener
 			screenManager.cursorY++;
 		}
 		
+	
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 	
 }
