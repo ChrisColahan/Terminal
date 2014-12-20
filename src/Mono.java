@@ -228,7 +228,7 @@ class screenManager
 	static int cursorX=0;
 	static int cursorY=0;
 	static HashMap<Character, BufferedImage> table;
-	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20;
+	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20+"()><[]";
 	static enhancedCharacter[][] screen;
 	static int Width,Height;
 	
