@@ -34,7 +34,7 @@ public class Mono extends JFrame {
         
         
         panel = new DylansJankyTextRenderer(w, h);
-        m.setPreferredSize(new Dimension(w*6,h*10));
+        m.setPreferredSize(new Dimension(w*5,h*10));
         m.setResizable(false);
         
         //panel.writeString("CAT ALPHEBET", 0, 0);
@@ -111,14 +111,14 @@ class DylansJankyTextRenderer extends JPanel {
 
             	if(c!=null && c.needs_update)
             	{
-            		g.drawImage(c.cache, x*6, y*10, null);
+            		g.drawImage(c.cache, x*5, y*10, null);
             		//screenManager.screen[x][y].needs_update=false;
             	}
             	
             	else if(c==null)
             	{
             		screenManager.screen[x][y] = new enhancedCharacter(' ');
-            		g.drawImage(screenManager.screen[x][y].cache, x*6, y*10, null);
+            		g.drawImage(screenManager.screen[x][y].cache, x*5, y*10, null);
             	}
             	
             	}
@@ -153,15 +153,15 @@ class enhancedCharacter
 	{
 		BufferedImage bi = deepCopy(screenManager.table.get(value));
     	
-    	int image[] = new int[60];
-    	bi.getRGB(0, 0, 6, 10, image, 0, 6);
+    	int image[] = new int[50];
+    	bi.getRGB(0, 0, 5, 10, image, 0, 5);
     	
-    	for(int m=0;m<60;m++)
+    	for(int m=0;m<50;m++)
     	{
     		if((image[m] == Color.WHITE.getRGB()))
-    			bi.setRGB(m%6, m/6, new Color(0, 0, 0).getRGB());	
+    			bi.setRGB(m%5, m/5, new Color(0, 0, 0).getRGB());	
     		if(image[m] != Color.WHITE.getRGB())
-    			bi.setRGB(m%6, m/6, new Color(r, g, b).getRGB());
+    			bi.setRGB(m%5, m/5, new Color(r, g, b).getRGB());
     	}
     	
     	cache = bi;
