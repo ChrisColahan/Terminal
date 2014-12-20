@@ -22,7 +22,7 @@ public class Mono extends JFrame {
 
     private static final long serialVersionUID = 1L;
     
-    private static DylansJankyTextRenderer panel;
+    public static DylansJankyTextRenderer panel;
     
     public static void main(String args[]) {
         Mono m = new Mono();
@@ -44,6 +44,14 @@ public class Mono extends JFrame {
         m.setFocusable(true);
         m.addKeyListener(new listner());
         
+        writePrompt();
+        
+    }
+    
+    public static void writePrompt()
+    {
+    	panel.writeString(" Arathnim ",255,255,255,25,100,100);
+        panel.writeString(""+ (char) 18 + (char) 17+" ",25,100,100);
     }
 }
 
@@ -60,6 +68,8 @@ class DylansJankyTextRenderer extends JPanel {
         screenManager.writeChar(c, x, y);
     }
     
+    
+    
     public void writeString(String s, int r, int g, int b)
     {
     	for(int k=0;k<s.length();k++)
@@ -71,6 +81,27 @@ class DylansJankyTextRenderer extends JPanel {
     			continue;
     		}
     		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,r,b,g);
+    		if(screenManager.cursorX<(screenManager.Width-1))
+    			screenManager.cursorX++;
+    		else
+    		{
+    			screenManager.cursorX=0;
+    			screenManager.cursorY++;
+    		}
+    	}
+    }
+    
+    public void writeString(String s, int r, int g, int b,int r2, int g2, int b2)
+    {
+    	for(int k=0;k<s.length();k++)
+    	{
+    		if(s.charAt(k)=='\n')
+    		{
+    			screenManager.cursorX=0;
+    			screenManager.cursorY++;
+    			continue;
+    		}
+    		screenManager.writeChar(s.charAt(k), screenManager.cursorX, screenManager.cursorY,r,b,g,r2,g2,b2);
     		if(screenManager.cursorX<(screenManager.Width-1))
     			screenManager.cursorX++;
     		else
@@ -97,6 +128,7 @@ class DylansJankyTextRenderer extends JPanel {
     	for(int k=0;k<s.length();k++)
     		screenManager.writeChar(s.charAt(k), x+k, y, r,g,b);
     }
+    
     
     public void paintComponent(Graphics g) {
         for(int x = 0; x < screenManager.Width; x++) {
@@ -128,6 +160,7 @@ class enhancedCharacter
 {
 	char value;
 	int r = 0,g = 0,b = 0;
+	int r2 = 0,g2 = 0, b2 = 0;
 	BufferedImage cache;
 	boolean needs_update=true;
 	
@@ -136,6 +169,17 @@ class enhancedCharacter
 		this.r = r;
 		this.g = g;
 		this.b = b;
+		genImage();
+	}
+	
+	public enhancedCharacter(char value, int r, int g, int b, int r2, int g2, int b2) {
+		this.value = value;
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.r2 = r2;
+		this.g2 = g2;
+		this.b2 = b2;
 		genImage();
 	}
 
@@ -154,7 +198,7 @@ class enhancedCharacter
     	for(int m=0;m<50;m++)
     	{
     		if((image[m] == Color.WHITE.getRGB()))
-    			bi.setRGB(m%5, m/5, new Color(0, 0, 0).getRGB());	
+    			bi.setRGB(m%5, m/5, new Color(r2, g2, b2).getRGB());	
     		if(image[m] != Color.WHITE.getRGB())
     			bi.setRGB(m%5, m/5, new Color(r, g, b).getRGB());
     	}
@@ -184,7 +228,7 @@ class screenManager
 	static int cursorX=0;
 	static int cursorY=0;
 	static HashMap<Character, BufferedImage> table;
-	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.";
+	static String charMap=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz." + (char) 15 + (char) 16 + (char) 17 + (char) 18 + (char) 19 + (char) 20;
 	static enhancedCharacter[][] screen;
 	static int Width,Height;
 	
@@ -227,10 +271,19 @@ class screenManager
 		screen[x][y] = new enhancedCharacter(c, r, b, g);
 		screen[x][y].needs_update=true;
 	}
+	
+	public static void writeChar(char c, int x, int y, int r, int b, int g,int r2, int b2, int g2)
+	{
+		System.out.println("Called writeChar with : "+c+' '+x+" "+y+" ");
+		screen[x][y] = new enhancedCharacter(c, r, b, g, r2, b2, g2);
+		screen[x][y].needs_update=true;
+	}
 }
 
 class listner implements KeyListener
 {
+	
+    public static String input="";
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -250,10 +303,31 @@ class listner implements KeyListener
 		{
 			screenManager.cursorX=0;
 			screenManager.cursorY++;
+			System.out.println("["+input+"]");
+			input="";
+			Mono.writePrompt();
 			return;
 		}
 		
-		screenManager.writeChar(e.getKeyChar(), screenManager.cursorX, screenManager.cursorY,255,255,255);
+		if(e.getKeyChar()=='\b' && screenManager.cursorX!=0)
+		{
+			System.out.println("Backspace!\n");
+			input = input.substring(0, input.length()-1);
+			screenManager.writeChar(' ', screenManager.cursorX-1, screenManager.cursorY);
+			screenManager.cursorX--;
+			return;
+		}
+		
+		if(screenManager.charMap.indexOf(e.getKeyChar()+"") != -1)
+		{
+			screenManager.writeChar(e.getKeyChar(), screenManager.cursorX, screenManager.cursorY,255,255,255);
+			input+=e.getKeyChar();
+		}
+			
+		else
+			return;
+		
+		
 		if(screenManager.cursorX<(screenManager.Width-1))
 			screenManager.cursorX++;
 		else
