@@ -1,3 +1,4 @@
+package dylans;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -12,6 +13,9 @@ import javax.swing.JFrame;
 
 
 public class Terminal extends JFrame {
+
+private static final long serialVersionUID = 1L;
+
 public static textRenderer panel;
     
     public static void main(String args[]) 
@@ -28,7 +32,6 @@ public static textRenderer panel;
         w = 120;
         h = 40;
         
-        
         panel = new textRenderer(w, h);
         t.setPreferredSize(new Dimension(w*5,h*10));
         t.setResizable(false);
@@ -40,7 +43,9 @@ public static textRenderer panel;
         t.setFocusable(true);
         t.addKeyListener(new inputHandler());
         
-        displaySmallerCat();
+        
+        
+        //displaySmallerCat();
         writePrompt();
     }
     
@@ -49,7 +54,7 @@ public static textRenderer panel;
     	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     	Calendar cal = Calendar.getInstance();
     	
-    	panel.writeString(" Arathnim ",255,255,255,25,100,100);
+    	panel.writeString(" Terminator ",255,255,255,25,100,100);
         panel.writeString(""+ (char) 21,25,100,100,42,71,135);
         panel.writeString(" "+dateFormat.format(cal.getTime())+" ",255,255,255,42,71,135);
         panel.writeString(""+(char) 18+(char) 17+" ", 42,135,71);

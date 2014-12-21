@@ -1,3 +1,4 @@
+package dylans;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -5,7 +6,7 @@ import javax.swing.JPanel;
 
 public class textRenderer extends JPanel {
 private static final long serialVersionUID = 1L;
-    
+
     public textRenderer(int w, int h) {
         super();
         screenManager.init(w, h);
@@ -94,7 +95,6 @@ private static final long serialVersionUID = 1L;
             	if(c!=null && c.needs_update)
             	{
             		g.drawImage(c.cache, x*5, y*10, null);
-            		//screenManager.screen[x][y].needs_update=false;
             	}
             	
             	else if(c==null)

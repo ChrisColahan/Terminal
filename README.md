@@ -1,4 +1,4 @@
 Terminal
 ========
 
-Terminal Emulator. Move along, nothing to see here.
+A better terminal emulator. Move along, nothing to see here.
